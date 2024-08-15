@@ -35,7 +35,6 @@ export default function Home() {
                   Experience high-quality video conferencing with Meet Stream.
                 </p>
                 <p className="">
-                  {" "}
                   Join meetings effortlessly from any device and stay connected
                 </p>
                 <p className="">with your team, family, and friends</p>

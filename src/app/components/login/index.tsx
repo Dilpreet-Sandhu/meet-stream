@@ -19,10 +19,10 @@ export default function SignIn() {
           <div className="flex items-center gap-[30px] justify-center">
             <div className=" font-semibold text-[#333333] ">about us</div>
             <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">
-              <Link href={"/sign-in"}>sign in</Link>
+              <Link href={"/sign-in"}>Sign in</Link>
             </div>
             <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">
-              <Link href={"/sign-up"}>sign up</Link>
+              <Link href={"/sign-up"}>Sign up</Link>
             </div>
           </div>
         </div>

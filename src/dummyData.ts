@@ -70,3 +70,26 @@ export const dummyUsers : Array<dummyUser> = [
     name : "harshdeep"
   },
 ]
+
+interface notification {
+  _id : string;
+  user : {
+    name : string
+  };
+
+}
+
+export const notifications : Array<notification> = [
+  {
+    _id : "303r3arjfja0w3",
+    user : {
+      name : "dilpreet"
+    }
+  },
+  {
+    _id : "d0fsfj0e0wef0esj",
+    user : {
+      name : "ravi"
+    }
+  },
+]

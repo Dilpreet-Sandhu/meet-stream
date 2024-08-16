@@ -5,10 +5,12 @@ import React from "react";
 import copy from "../../../../public/copy.svg";
 import Buttons from "@/app/components/bottomButtons";
 import SendButton from "@/app/components/sendMessageButton";
+import AcceptRequestDialog from "@/app/shared/acceptRequest";
 
 export default function MeetingRoom() {
   return (
     <div className="w-full flex flex-col h-screen bg-black">
+      <AcceptRequestDialog/>
       <header className="bg-zinc-900 pl-5 text-[15px] py-5 w-full text-white">
         Dilpreet's room
       </header>
@@ -41,11 +43,11 @@ export default function MeetingRoom() {
         </div>
         <div className="bg-zinc-900 flex items-center gap-4   w-full py-2">
           <div className="w-[600px] ml-5 flex">
-            <div className="w-[150px] h-[40px] py-3 rounded-md flex items-center  bg-zinc-500 opacity-40 ">
+            <div className="w-[150px] h-[40px] py-3 rounded-md flex items-center z-14  bg-zinc-500 opacity-40 ">
               <p className=" text-nowrap text-[13px] font-semibold text-white pl-2">xyz-wes-cbg</p>
               <div className="w-[1px] h-full ml-1 bg-white" />
               <button className="pl-2">
-                <Image alt="clone" className="w-[23px] h-[23px] ml-2 fill-white" src={copy}/>
+                <Image alt="clone" className="w-[23px] h-[23px] z-1 ml-2 fill-white" src={copy}/>
               </button>
             </div>
           </div>

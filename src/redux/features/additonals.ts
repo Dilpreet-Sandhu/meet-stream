@@ -2,11 +2,13 @@ import { createSlice,PayloadAction } from "@reduxjs/toolkit"
 
 
 interface addtions {
-    joinMeeting : boolean
+    joinMeeting : boolean;
+    meetingNotificaiton  :boolean
 }
 
 const initialState : addtions =  {
-    joinMeeting : false
+    joinMeeting : false,
+    meetingNotificaiton : true
 }
 
 const additonals  = createSlice({
@@ -19,6 +21,12 @@ const additonals  = createSlice({
         setJoinMeetingFalse(state) { 
             state.joinMeeting = false;
         },
+        setMeetingNotificationTrue(state) {
+            state.meetingNotificaiton = true
+        },
+        setMeetingNotificationFalse(state) {
+            state.meetingNotificaiton = false
+        }
     }
 })
 

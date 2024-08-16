@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
-import { Inter,Poppins } from "next/font/google";
-import "./globals.css";
 import ReduxProvider from "@/redux/provider";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
+import ProtectedRoute from "./protectedRoutes";
 
 const poppins = Poppins({ weight : ["100","200","300","400","500","600","700","800","900"],subsets : ["latin"]});
 
@@ -17,11 +18,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={poppins.className}>
         <ReduxProvider>
-          {children}
+          <ProtectedRoute>
+            {children}
+          </ProtectedRoute>
         </ReduxProvider>
       </body>
     </html>

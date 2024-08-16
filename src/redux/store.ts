@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import additonals from "./features/additonals";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import user from "./features/user";
 
 export const store = configureStore({
     reducer : {
-        additional : additonals
+        additional : additonals,
+        user : user
     }
 })
 

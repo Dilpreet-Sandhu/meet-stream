@@ -43,9 +43,11 @@ export default function Home() {
                 <button className="bg-[#17153B] border-[3px] px-5 py-2 rounded-md text-white opacity-85">
                   join a meeting
                 </button>
-                <button className="bg-[#17153B] border-[3px] px-5 py-2 rounded-md text-white opacity-85">
+                <Link href={"/create-meeting"}>
+                <button  className="bg-[#17153B] border-[3px] px-5 py-2 rounded-md text-white opacity-85">
                   host a meeting
                 </button>
+                </Link>
               </div>
             </div>
           </div>

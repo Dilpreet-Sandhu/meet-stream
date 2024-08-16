@@ -1,10 +1,10 @@
 'use client'
 import Image from 'next/image';
 import phone from '../../../../public/phone.svg';
-import video from '../../../../public/video-solid.svg';
+import video from '../../../../public/video.svg';
 import microPhone from '../../../../public/microphone-solid.svg';
 import cast from '../../../../public/cast.svg';
-import React from 'react';
+
 
 export default function Buttons()  {
   return (

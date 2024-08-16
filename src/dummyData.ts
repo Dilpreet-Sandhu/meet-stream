@@ -46,3 +46,27 @@ export const messages: Array<message> = [
     createdAt: new Date(),
   },
 ];
+
+type dummyUser = {
+  _id : string,
+  name : string
+}
+
+export const dummyUsers : Array<dummyUser> = [
+  {
+    _id : "sdfkl;afj3w0fa",
+    name : "thind"
+  },
+  {
+    _id : "dsfeje0t40s0g02",
+    name : "dilpreet"
+  },
+  {
+    _id : "sdfkl;0efae0f043",
+    name : "aaditya"
+  },
+  {
+    _id : "sdfkl;dflsjf0wf030",
+    name : "harshdeep"
+  },
+]

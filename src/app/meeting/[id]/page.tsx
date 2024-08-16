@@ -44,7 +44,7 @@ export default function MeetingRoom() {
             <div className="w-[150px] h-[40px] py-3 rounded-md flex items-center  bg-zinc-500 opacity-40 ">
               <p className=" text-nowrap text-[13px] font-semibold text-white pl-2">xyz-wes-cbg</p>
               <div className="w-[1px] h-full ml-1 bg-white" />
-              <button>
+              <button className="pl-2">
                 <Image alt="clone" className="w-[23px] h-[23px] ml-2 fill-white" src={copy}/>
               </button>
             </div>

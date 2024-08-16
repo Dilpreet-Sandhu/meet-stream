@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import videoConfrencing from "../../public/videoConfrencing.svg";
+import JoinMeetingButton from "./components/joinMeetingButton";
+import JoinMeetingDialog from "./shared/joinMeetingDialog";
 
 export default function Home() {
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">
+      <JoinMeetingDialog/>
       <div className="px-20 flex flex-col">
         <div className="flex items-center justify-between pt-10 h-[50px] w-full">
           <div>
@@ -40,9 +43,7 @@ export default function Home() {
                 <p className="">with your team, family, and friends</p>
               </div>
               <div className="mt-10 flex gap-5">
-                <button className="bg-[#17153B] border-[3px] px-5 py-2 rounded-md text-white opacity-85">
-                  join a meeting
-                </button>
+                <JoinMeetingButton/>
                 <Link href={"/create-meeting"}>
                 <button  className="bg-[#17153B] border-[3px] px-5 py-2 rounded-md text-white opacity-85">
                   host a meeting

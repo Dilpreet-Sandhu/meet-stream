@@ -6,8 +6,8 @@ import SearchUsers from "../searchUesrs";
 
 export default function MeetingForm() {
   return (
-    <div className="w-full h-full flex">
-      <div className="w-1/2 py-5 px-4 h-full">
+    <div className="w-full  h-full flex">
+      <div className="w-1/2  py-5 px-1 h-full">
         <div className="w-[400px] pl-5 h-[70px]">
           <p className="text-[#17153B] text-[14px] font-medium opacity-65">
             name
@@ -54,10 +54,9 @@ export default function MeetingForm() {
               <SearchUsers/>
           </div>
 
-          <div className="h-[50px] mt-[150px] w-10/12  bg-green-500">
-            
+          <div className="h-[50px]  mt-[120px] w-10/12">
+            <button className="bg-[#2E236C] outline-none rounded-md  w-full h-full text-white font-medium text-[18px]">Create Meeting</button>
           </div>
-
         </div>
       </div>
     </div>

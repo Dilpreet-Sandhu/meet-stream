@@ -18,7 +18,7 @@ export default function SearchUsers() {
           />
         </button>
       </form>
-      <div className=" flex  items-center w-full h-full ">
+      <div className=" flex  items-center mt-4 w-full h-full ">
         <SearchedUser/>
       </div>
     </div>

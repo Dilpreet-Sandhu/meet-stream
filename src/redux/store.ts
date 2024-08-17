@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import additonals from "./features/additonals";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
+import meetingNotification from './features/roomNotification'
 import user from "./features/user";
 
 export const store = configureStore({
     reducer : {
         additional : additonals,
-        user : user
+        user : user,
+        meetingNotification : meetingNotification
     }
 })
 

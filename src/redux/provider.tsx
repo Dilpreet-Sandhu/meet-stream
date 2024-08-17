@@ -10,6 +10,7 @@ interface props {
 const ReduxProvider: React.FC<props> = ({ children }) => {
 
   
+  
 
   return <Provider store={store}>{children}</Provider>;
 };

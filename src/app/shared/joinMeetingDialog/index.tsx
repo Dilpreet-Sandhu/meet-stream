@@ -4,10 +4,17 @@ import { setJoinMeetingFalse } from "@/redux/features/additonals";
 import { useAppSelector } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {motion} from 'framer-motion';
+import { addNotifcation } from "@/redux/features/roomNotification";
 
 export default function JoinMeetingDialog() {
   const joinMeeting = useAppSelector((state) => state.additional.joinMeeting);
   const dispatch = useDispatch();
+
+
+
+  function closeDialog() {
+    dispatch(setJoinMeetingFalse());
+  }
 
   return (
     <>
@@ -25,7 +32,7 @@ export default function JoinMeetingDialog() {
                 join a meeting
               </h1>
               <button
-                onClick={() => dispatch(setJoinMeetingFalse())}
+                onClick={() => closeDialog()}
                 className="bg-transparent text-[17px] text-[#17153B] pr-5 font-mono font-bold"
               >
                 x

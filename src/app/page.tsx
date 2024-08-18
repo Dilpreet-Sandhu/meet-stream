@@ -1,16 +1,21 @@
-import Image from "next/image";
+import { auth } from "@/auth";
 import Link from "next/link";
-import videoConfrencing from "../../public/videoConfrencing.svg";
-import JoinMeetingButton from "./components/joinMeetingButton";
-import JoinMeetingDialog from "./shared/joinMeetingDialog";
 import HomePageImg from "./components/homePage";
 import HomeText from "./components/homePage/home";
+import JoinMeetingDialog from "./shared/joinMeetingDialog";
+import { signOut } from "next-auth/react";
+import Logout from "./components/logout";
 
+export default async function Home() {
+  const session = await auth();
+  const user = session?.user;
+  console.log(user);
 
-export default function Home() {
+ 
+
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">
-      <JoinMeetingDialog/>
+      <JoinMeetingDialog />
       <div className="px-20 flex flex-col">
         <div className="flex items-center justify-between pt-10 h-[50px] w-full">
           <div>
@@ -23,19 +28,25 @@ export default function Home() {
           <div className="flex items-center gap-[30px] justify-center">
             <div className="font-semibold text-[#333333] ">dashboard</div>
             <div className=" font-semibold text-[#333333] ">about us</div>
-            <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">
-              <Link href={"/sign-in"}>sign in</Link>
-            </div>
-            <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">
-              <Link href={"/sign-up"}>sign up</Link>
-            </div>
+            {user ? (
+              <Logout/>
+            ) : (
+              <>
+                <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">
+                  <Link href={"/sign-in"}>sign in</Link>
+                </div>
+                <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">
+                  <Link href={"/sign-up"}>sign up</Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="w-full flex h-[80vh] mt-[25px]">
           <div className="w-1/2  h-full py-20">
-            <HomeText/>
+            <HomeText />
           </div>
-          <HomePageImg/>
+          <HomePageImg />
         </div>
       </div>
     </div>

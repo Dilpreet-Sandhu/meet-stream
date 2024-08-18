@@ -1,10 +1,21 @@
 "use client";
 
+import { Login } from "@/app/actions";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import login from '../../../../public/login.svg';
+import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
+import login from "../../../../public/login.svg";
 
 export default function SignIn() {
+
+
+  function handleGoogleLogin() {
+    console.log('google')
+    signIn("google");
+  }
+
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">
       <div className="px-20 flex flex-col">
@@ -40,40 +51,74 @@ export default function SignIn() {
                       Sign up
                     </Link>
                   </div>
-                  <div className="pt-[20px] flex flex-col">
-                    <h1 className="text-[#2E236C] font-bold text-[17px]">
-                      Email adress
-                    </h1>
-                    <input
-                      placeholder="Enter your email"
-                      className="pl-2 placeholder:text-zinc-600 text-zinc-800 text-[14px] flex items-center  placeholder:text-[12px] w-[300px] border-[#2E236C] border-[3px] rounded-md h-10 bg-transparent mt-2"
-                    />
-                  </div>
-                  <div className="pt-[20px] flex flex-col">
-                    <h1 className="text-[#2E236C] font-bold text-[17px]">
-                      password
-                    </h1>
-                    <input
-                      placeholder="Enter your password"
-                      className="pl-2 placeholder:text-zinc-600 text-zinc-800 text-[14px] flex items-center  placeholder:text-[12px] w-[300px] border-[#2E236C] border-[3px] rounded-md h-10 bg-transparent mt-2"
-                    />
-                  </div>
-                  <div className="pt-[20px]">
-                    <button className="w-[300px] h-[40px] bg-[#2E236C] text-white rounded-md">Sign in</button>
-                  </div>
+                  <form
+                    action={async (formData) => {
+                      const email = formData.get("email");
+                      const password = formData.get("password");
+
+                      if (!email || !password) {
+                        return toast.error(
+                          "please provide both email and password"
+                        );
+                      }
+
+                      await Login(formData).then(() => {
+                        toast.success("login successfull");
+                        redirect("/");
+                      });
+                    }}
+                  >
+                    <div className="pt-[20px] flex flex-col">
+                      <h1 className="text-[#2E236C] font-bold text-[17px]">
+                        Email adress
+                      </h1>
+                      <input
+                        placeholder="Enter your email"
+                        name="email"
+                        type="email"
+                        className="pl-2 placeholder:text-zinc-600 text-zinc-800 outline-none  text-[14px] flex items-center  placeholder:text-[12px] w-[300px] border-[#2E236C] border-[3px] rounded-md h-10 bg-transparent mt-2"
+                      />
+                    </div>
+                    <div className="pt-[20px] flex flex-col">
+                      <h1 className="text-[#2E236C] font-bold text-[17px]">
+                        password
+                      </h1>
+                      <input
+                        placeholder="Enter your password"
+                        name="password"
+                        type="password"
+                        className="pl-2 placeholder:text-zinc-600 outline-none text-zinc-800 text-[14px] flex items-center  placeholder:text-[12px] w-[300px] border-[#2E236C] border-[3px] rounded-md h-10 bg-transparent mt-2"
+                      />
+                    </div>
+                    <div className="pt-[20px]">
+                      <button
+                        type="submit"
+                        className="w-[300px] h-[40px] bg-[#2E236C] text-white rounded-md"
+                      >
+                        Sign in
+                      </button>
+                    </div>
+                  </form>
                   <div className="w-[300px] flex justify-center py-2">or</div>
                   <div>
-    <button className="px-4 py-2 w-[300px] items-center justify-center border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150">
-        <img className="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo"/>
-        <span>Login with Google</span>
-    </button>
+                      <button
+                        onClick={handleGoogleLogin}
+                        className="px-4 py-2 w-[300px] items-center justify-center border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
+                      >
+                        <img
+                          className="w-6 h-6"
+                          src="https://www.svgrepo.com/show/475656/google-color.svg"
+                          loading="lazy"
+                          alt="google logo"
+                        />
+                        <span>Login with Google</span>
+                      </button>
                   </div>
-                  
                 </div>
                 <div className="w-1/2 flex items-center justify-center bg-[rgba(251,250,252,0.44)] h-full rounded-e-2xl">
-                <div className="z-333333">
-                <Image className="mr-10 z-333" src={login} alt="login"/>
-                </div>
+                  <div className="z-333333">
+                    <Image className="mr-10 z-333" src={login} alt="login" />
+                  </div>
                 </div>
               </div>
             </div>

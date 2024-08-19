@@ -3,8 +3,24 @@ import logo from "../../../public/logo.svg";
 import Link from "next/link";
 import MeetingForm from "../components/createMeetingForm";
 import AdditonalSettings from "../components/additonalSettings";
+import { getAllUsers } from "../actions";
 
-export default function CreateMeeting() {
+
+async function getUsers() {
+  try {
+    const res = await getAllUsers();
+
+    return JSON.parse(JSON.stringify(res))
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export default async function CreateMeeting() {
+
+  const users = await getUsers();
+
   return (
     <div className="bg-[#D9D0FF] w-full flex flex-col h-screen px-20">
       <div className="self-start pt-4">
@@ -23,7 +39,7 @@ export default function CreateMeeting() {
         </h1>
       </div>
       <div className="w-10/12 rounded-lg h-[350px] flex bg-[#CABFF0] mt-3">
-        <MeetingForm />
+        <MeetingForm users={users}/>
       </div>
       <div className="mt-5">
         <h1 className="font-extrabold text-[#2E236C] cursor-pointer text-[20px]">

@@ -3,19 +3,16 @@ import Link from "next/link";
 import HomePageImg from "./components/homePage";
 import HomeText from "./components/homePage/home";
 import JoinMeetingDialog from "./shared/joinMeetingDialog";
-import { signOut } from "next-auth/react";
 import Logout from "./components/logout";
 
 export default async function Home() {
   const session = await auth();
   const user = session?.user;
-  console.log(user);
-
- 
+  
 
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">
-      <JoinMeetingDialog />
+      <JoinMeetingDialog user={user}/>
       <div className="px-20 flex flex-col">
         <div className="flex items-center justify-between pt-10 h-[50px] w-full">
           <div>

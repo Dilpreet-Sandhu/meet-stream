@@ -5,8 +5,15 @@ import { useAppSelector } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {motion} from 'framer-motion';
 import { addNotifcation } from "@/redux/features/roomNotification";
+import { Session } from "next-auth";
+import Image from "next/image";
+ 
 
-export default function JoinMeetingDialog() {
+
+
+
+
+export default function JoinMeetingDialog({user} : {user : any}) {
   const joinMeeting = useAppSelector((state) => state.additional.joinMeeting);
   const dispatch = useDispatch();
 
@@ -31,6 +38,8 @@ export default function JoinMeetingDialog() {
               <h1 className="mt-3 ml-4 font-medium text-[#17153B] text-[18px]">
                 join a meeting
               </h1>
+              
+          
               <button
                 onClick={() => closeDialog()}
                 className="bg-transparent text-[17px] text-[#17153B] pr-5 font-mono font-bold"

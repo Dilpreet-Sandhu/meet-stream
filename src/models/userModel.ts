@@ -1,13 +1,12 @@
 import {model,Schema,models} from 'mongoose';
 
 
-interface Iuser {
+export interface Iuser {
     username : string;
     email : string;
     password : string | "";
     avatar? : string;
     isHost :boolean;
-    googleLogin : true
 }
 
 

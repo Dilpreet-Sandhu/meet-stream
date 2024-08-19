@@ -1,6 +1,6 @@
 'use server'
 
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import dbConnect from "@/database/connection";
 import { User } from "@/models/userModel";
 import bcrypt from 'bcryptjs';
@@ -95,5 +95,30 @@ export async function GetUser(email : string) {
 
     } catch (error) {
         return error;
+    }
+}
+
+export async function getAllUsers() {
+    try {
+        await dbConnect();
+
+        const session = await auth();
+        const authUser = session?.user;
+
+     
+        // console.log("auth user" + authUser);
+
+        const users = await User.find();
+
+        if (!users) {
+            throw new Error('no users found')
+        }
+
+        const usersOtherThenMe = users.filter((user) => user.email !== authUser?.email);
+
+        return usersOtherThenMe;
+
+    } catch (error) {
+        return error
     }
 }

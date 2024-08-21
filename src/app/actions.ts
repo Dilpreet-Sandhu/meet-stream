@@ -116,7 +116,7 @@ export async function getAllUsers() {
 
         const usersOtherThenMe = users.filter((user) => user.email !== authUser?.email);
 
-        return usersOtherThenMe;
+        return JSON.parse(JSON.stringify(usersOtherThenMe));
 
     } catch (error) {
         return error

@@ -4,15 +4,27 @@ import { addFormDate } from "@/redux/features/room";
 import { useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import SearchUsers from "../searchUesrs";
-import unqid from 'uniqid'
+import unqid from "uniqid";
+import { redirect, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useCreateMeetingMutation } from "@/redux/features/api";
+import { apiCall, useAsyncMutation } from "@/app/lib/helper";
+import { useEffect, useState } from "react";
 
-export default function MeetingForm({users} : {users :any}) {
-
-
+export default function MeetingForm({
+  submitBtn,
+  users,
+}: {
+  submitBtn: any;
+  users: any;
+}) {
   const dispatch = useDispatch();
-  const roomData = useAppSelector(state => state.room);
+  const router = useRouter();
+  const roomData = useAppSelector((state) => state.room);
+  const [loading,setLoading] = useState(false);
 
-  
+  // const [data,executeMutation,loading,error] = useAsyncMutation(useCreateMeetingMutation);
+
   return (
     <div className="w-full  h-full flex">
       <div className="w-1/2  py-5 px-1 h-full">
@@ -23,7 +35,9 @@ export default function MeetingForm({users} : {users :any}) {
             </p>
             <input
               value={roomData.title}
-              onChange={(e) => dispatch(addFormDate({name : "title",data : e.target.value}))}
+              onChange={(e) =>
+                dispatch(addFormDate({ name: "title", data: e.target.value }))
+              }
               name="title"
               className="w-[300px] text-[#17153B] placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
               placeholder="enter room title"
@@ -36,7 +50,11 @@ export default function MeetingForm({users} : {users :any}) {
             <input
               name="description"
               value={roomData.description}
-              onChange={(e) => dispatch(addFormDate({name : "description",data : e.target.value}))}
+              onChange={(e) =>
+                dispatch(
+                  addFormDate({ name: "description", data: e.target.value })
+                )
+              }
               className="w-[300px] text-[#17153B] placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[70px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
               placeholder="enter description"
             />
@@ -49,7 +67,9 @@ export default function MeetingForm({users} : {users :any}) {
               <input
                 name="date"
                 value={roomData.date}
-              onChange={(e) => dispatch(addFormDate({name : "date",data : e.target.value}))}
+                onChange={(e) =>
+                  dispatch(addFormDate({ name: "date", data: e.target.value }))
+                }
                 className="w-[200px] px-4 text-[#17153B] opacity-65 placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
                 type="date"
               />
@@ -61,7 +81,9 @@ export default function MeetingForm({users} : {users :any}) {
               <input
                 name="time"
                 value={roomData.time}
-                onChange={(e) => dispatch(addFormDate({name : "time",data : e.target.value}))}
+                onChange={(e) =>
+                  dispatch(addFormDate({ name: "time", data: e.target.value }))
+                }
                 className="w-[100px] px-4 text-[#17153B] opacity-65 focus:outline-none bg-transparent pl-4 rounded-md h-[40px] text-[14px] border-[#17153B] bg-none border-[3px]"
                 type="time"
               />
@@ -75,11 +97,18 @@ export default function MeetingForm({users} : {users :any}) {
             <p className="text-[15px] text-[#17153B] opacity-75 pt-5 font-medium">
               people to invite
             </p>
-            <SearchUsers users={users}/>
+            <SearchUsers users={users} />
           </div>
 
           <div className="h-[50px]  mt-[120px] w-10/12">
-            <button className="bg-[#2E236C] outline-none rounded-md  w-full h-full text-white font-medium text-[18px]">
+            <button
+              onClick={() => {
+                toast.loading("creating room")
+                submitBtn(roomData);
+                toast.success("room created")
+              }}
+              className="bg-[#2E236C] outline-none rounded-md  w-full h-full text-white font-medium text-[18px]"
+            >
               Create Meeting
             </button>
           </div>

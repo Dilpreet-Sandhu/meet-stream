@@ -12,14 +12,14 @@ export interface roomMeeting {
         allowEveryoneToJoin : boolean,
         allowEveryoneToMessage : boolean
     },
-    members : string[]
+    members : any[]
 }
 
 const initialState : roomMeeting = {
     title : "",
     description : "",
-    date : "0",
-    time : "0",
+    date : "2024-05-05",
+    time : "08:30",
     options : {
         screenShare : false,
         scheduleForLater : false,
@@ -48,8 +48,11 @@ const roomSlice = createSlice({
             state.options[action.payload.name] = false;
             }
         },
-        addMembersToRoom(state : roomMeeting,action : {payload : string}) {
+        addMembersToRoom(state : roomMeeting,action : {payload : any}) {
             state.members.push(action.payload);
+        },
+        removeMemberFromRoom(state : roomMeeting,action : {payload : string}) {
+            state.members = state.members.filter((user => user._id !== action.payload));
         }
         
     }
@@ -57,5 +60,5 @@ const roomSlice = createSlice({
 
 
 
-export const {addFormDate,setOptionToggler,addMembersToRoom} = roomSlice.actions;
+export const {addFormDate,setOptionToggler,addMembersToRoom,removeMemberFromRoom} = roomSlice.actions;
 export default roomSlice.reducer;

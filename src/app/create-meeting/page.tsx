@@ -4,6 +4,8 @@ import Link from "next/link";
 import MeetingForm from "../components/createMeetingForm";
 import AdditonalSettings from "../components/additonalSettings";
 import { getAllUsers } from "../actions";
+import { createMeeting } from "@/server_actions/room/roomAction";
+import { redirect } from "next/navigation";
 
 
 async function getUsers() {
@@ -20,6 +22,24 @@ async function getUsers() {
 export default async function CreateMeeting() {
 
   const users = await getUsers();
+
+  async function createMeetingSubmit(formData:any) {
+
+    'use server';
+      
+    if (typeof formData == "string") {
+      formData = JSON.parse(formData);
+    }
+
+      const data = await createMeeting(formData);
+
+      redirect(`/meeting/${data.data._id}`)
+
+      
+     
+  }
+
+   
 
   return (
     <div className="bg-[#D9D0FF] w-full flex flex-col h-screen px-20">
@@ -39,7 +59,7 @@ export default async function CreateMeeting() {
         </h1>
       </div>
       <div className="w-10/12 rounded-lg h-[350px] flex bg-[#CABFF0] mt-3">
-        <MeetingForm users={users}/>
+        <MeetingForm submitBtn={createMeetingSubmit} users={users}/>
       </div>
       <div className="mt-5">
         <h1 className="font-extrabold text-[#2E236C] cursor-pointer text-[20px]">

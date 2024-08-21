@@ -4,8 +4,8 @@ import {Schema,Types,model,models} from 'mongoose';
 interface roomMeeting {
     title : string,
     description : string,
-    date : Date,
-    time : Date,
+    date : string,
+    time : string,
     hostId : Types.ObjectId,
     members : Array<Types.ObjectId>,
     meetingCode : string,
@@ -28,10 +28,10 @@ const roomSchema = new Schema<roomMeeting>({
         required: true
     },
     date : {
-        type : Date
+       type : String
     },
     time : {
-        type : Date
+        type : String 
     },
     hostId : {
         type : Schema.Types.ObjectId,
@@ -39,10 +39,10 @@ const roomSchema = new Schema<roomMeeting>({
     },
     members : [
         {
-            _id : {
+            
                 type : Schema.Types.ObjectId,
                 ref : "User"
-            }
+            
         }
     ],
     meetingCode : {

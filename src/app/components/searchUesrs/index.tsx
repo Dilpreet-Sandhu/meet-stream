@@ -1,15 +1,19 @@
+'use client'
 import Image from "next/image";
 import search from "../../../../public/search.svg";
 import SearchedUser from "../searchedUser";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { BiPlus } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { addMembersToRoom } from "@/redux/features/room";
 
 export default function SearchUsers({ users }: { users: any }) {
   const [openDialog, setOpenDialog] = useState(true);
   const [inputVal, setInputVal] = useState("");
+  const dispatch = useDispatch();
 
-  console.log(users);
+
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputVal(e.target.value);
@@ -20,8 +24,12 @@ export default function SearchUsers({ users }: { users: any }) {
     setOpenDialog(false);
   }
 
+  function handleAddMember(user : any) {
+      dispatch(addMembersToRoom(user));
+  }
+
   return (
-    <div className="flex flex-col w-full h-full">
+    <div onClick={() => setOpenDialog(false)}  className="flex flex-col w-full h-full">
       <div
         className={`w-[355px] ${
           !openDialog && "hidden"
@@ -41,7 +49,7 @@ export default function SearchUsers({ users }: { users: any }) {
                     <p>{user?.username}</p>
                   </div>
                 </div>
-                <div className="flex-1 flex items-center justify-center mr-3">
+                <div onClick={() => handleAddMember(user)} className="flex-1 flex items-center justify-center mr-3">
                   <BiPlus
                     className="w-[30px] h-[30px] bg-zinc-100 hover:bg-white rounded-sm"
                     color="green"

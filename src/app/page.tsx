@@ -8,7 +8,7 @@ import Logout from "./components/logout";
 export default async function Home() {
   const session = await auth();
   const user = session?.user;
-  
+  console.log(user?.image)
 
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">
@@ -22,11 +22,11 @@ export default async function Home() {
               </h1>
             </Link>
           </div>
-          <div className="flex items-center gap-[30px] justify-center">
+          <div className="flex items-center gap-[25px] justify-center">
             <div className="font-semibold text-[#333333] ">dashboard</div>
             <div className=" font-semibold text-[#333333] ">about us</div>
             {user ? (
-              <Logout/>
+              <Logout user={user}/>
             ) : (
               <>
                 <div className="px-4 font-medium cursor-pointer rounded-md flex items-center justify-center border-[#2E236C] border-[3px] w-[100px] h-[40px]">

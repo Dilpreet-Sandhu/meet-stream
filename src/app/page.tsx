@@ -8,7 +8,7 @@ import Logout from "./components/logout";
 export default async function Home() {
   const session = await auth();
   const user = session?.user;
-  console.log(user?.image)
+  
 
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">

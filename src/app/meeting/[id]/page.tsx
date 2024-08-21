@@ -6,13 +6,31 @@ import copy from "../../../../public/copy.svg";
 import Buttons from "@/app/components/bottomButtons";
 import SendButton from "@/app/components/sendMessageButton";
 import AcceptRequestDialog from "@/app/shared/acceptRequest";
+import { getMeetingDetails } from "@/server_actions/room/roomAction";
+import toast from "react-hot-toast";
+import CopyButton from "@/app/components/copyButton";
 
-export default function MeetingRoom() {
+export default async function MeetingRoom({ params }: { params: any }) {
+  const { id } = params;
+
+  const { data } = await getMeetingDetails(id);
+
+  async function copyText() {
+    "use server";
+    try {
+      await navigator.clipboard.writeText(data.meetingCode);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  console.log(data);
+
   return (
     <div className="w-full flex flex-col h-screen bg-black">
-      <AcceptRequestDialog/>
+      <AcceptRequestDialog />
       <header className="bg-zinc-900 pl-5 text-[15px] py-5 w-full text-white">
-        Dilpreet's room
+        {data?.title}
       </header>
       <div className="flex-1 flex flex-col">
         <div className="flex-1 flex">
@@ -43,12 +61,12 @@ export default function MeetingRoom() {
         </div>
         <div className="bg-zinc-900 flex items-center gap-4   w-full py-2">
           <div className="w-[600px] ml-5 flex">
-            <div className="w-[150px] h-[40px] py-3 rounded-md flex items-center z-14  bg-zinc-500 opacity-40 ">
-              <p className=" text-nowrap text-[13px] font-semibold text-white pl-2">xyz-wes-cbg</p>
+            <div className="w-[150px] h-[40px] py-3  rounded-md flex items-center z-14  bg-zinc-500 opacity-40 ">
+              <p className=" text-nowrap text-[13px] font-semibold text-white tracking-wide pl-2">
+                {data?.meetingCode}
+              </p>
               <div className="w-[1px] h-full ml-1 bg-white" />
-              <button className="pl-2">
-                <Image alt="clone" className="w-[23px] h-[23px] z-1 ml-2 fill-white" src={copy}/>
-              </button>
+              <CopyButton copyFn={copyText} />
             </div>
           </div>
           <div className="flex flex-1 gap-5">

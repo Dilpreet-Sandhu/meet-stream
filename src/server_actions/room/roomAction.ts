@@ -14,7 +14,7 @@ export async function createMeeting(formData : any) {
     
         const members = formData.members.map((member: any) => member._id);
     
- 
+      const date = new Date();
     
         const session = await auth();
         const user = session?.user;
@@ -29,17 +29,17 @@ export async function createMeeting(formData : any) {
         const room = await Room.create({
           title: formData.title,
           description: formData.description,
-          date: formData.date,
-          time: formData.time,
+          date: formData.date == "2024-05-05" || date.getUTCDate(),
+          time: formData.time == "08:30" || date.getHours(),
           hostId: user?.id,
           members,
           meetingCode: code,
           status: "hasn't started",
           options: {
-            screenShare: formData.options.screenShare,
-            scheduleForLater: formData.options.scheduleForLater,
-            allowEveryOneToJoin: formData.options.allowEveryOneToJoin,
-            allowEveryOneToMessage: formData.options.allowEveryOneToMessage,
+            screenShare: formData.options.screenShare || false,
+            scheduleForLater: formData.options.scheduleForLater || false,
+            allowEveryOneToJoin: formData.options.allowEveryOneToJoin || false,
+            allowEveryOneToMessage: formData.options.allowEveryOneToMessage || false,
           },
         });
     
@@ -50,6 +50,7 @@ export async function createMeeting(formData : any) {
             message : "couldn't create room"
           }
         }
+
         return {
             data : room,
             message : "room created successfully"
@@ -60,4 +61,33 @@ export async function createMeeting(formData : any) {
             message : error
         }
       }
+}
+
+export async function getMeetingDetails(id : string) {
+  try {
+    if (!id) {
+      return {
+        messag : "no room id found"
+      }
+    }
+
+    const room = await Room.findById(id);
+
+    if (!room) {
+      return {
+        message : "invalid room id"
+      }
+    }
+
+    return {
+      message : "successfully fetched room ",
+      data : room
+    }
+ 
+  } catch (error) {
+    console.log(error);
+    return {
+      message : error
+    }
+  }
 }

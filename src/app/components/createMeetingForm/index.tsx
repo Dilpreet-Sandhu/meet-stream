@@ -67,10 +67,11 @@ export default function MeetingForm({
               <input
                 name="date"
                 value={roomData.date}
+                disabled={!roomData.options.scheduleForLater && true}
                 onChange={(e) =>
                   dispatch(addFormDate({ name: "date", data: e.target.value }))
                 }
-                className="w-[200px] px-4 text-[#17153B] opacity-65 placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
+                className="w-[200px] px-4 text-[#17153B]  placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
                 type="date"
               />
             </div>
@@ -81,10 +82,11 @@ export default function MeetingForm({
               <input
                 name="time"
                 value={roomData.time}
+                disabled={!roomData.options.scheduleForLater && true}
                 onChange={(e) =>
                   dispatch(addFormDate({ name: "time", data: e.target.value }))
                 }
-                className="w-[100px] px-4 text-[#17153B] opacity-65 focus:outline-none bg-transparent pl-4 rounded-md h-[40px] text-[14px] border-[#17153B] bg-none border-[3px]"
+                className="w-[120px] px-4 text-[#17153B]  focus:outline-none bg-transparent pl-4 rounded-md h-[40px] text-[14px] border-[#17153B] bg-none border-[3px]"
                 type="time"
               />
             </div>

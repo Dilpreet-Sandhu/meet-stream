@@ -59,14 +59,7 @@ export default function SearchUsers({ users }: { users: any }) {
             ))}
           </div>
         </div>
-        <div className="flex-1  px-2">
-          <button
-            onClick={handleAddMemberClick}
-            className={`w-full h-full bg-purple-700 text-white`}
-          >
-            add Members
-          </button>
-        </div>
+        
       </div>
       <form className="flex relative">
         <input

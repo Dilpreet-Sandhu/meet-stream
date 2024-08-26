@@ -4,15 +4,26 @@ import HomePageImg from "./components/homePage";
 import HomeText from "./components/homePage/home";
 import JoinMeetingDialog from "./shared/joinMeetingDialog";
 import Logout from "./components/logout";
+import { addMemberByCode } from "@/server_actions/room/roomAction";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await auth();
   const user = session?.user;
-  
+   
+   async function addUserToRoom(codeInput : string,userId : string)  {
+    'use server';
+    const room = await addMemberByCode(codeInput,userId);
+    console.log(room);
+    redirect(`/meeting/${room?.data?._id}`)
+  };
+
+  console.log(user)
+    
 
   return (
     <div className="w-full min-h-screen bg-[#D9D0FF]">
-      <JoinMeetingDialog user={user}/>
+      <JoinMeetingDialog addMember={addUserToRoom} user={user}/>
       <div className="px-20 flex flex-col">
         <div className="flex items-center justify-between pt-10 h-[50px] w-full">
           <div>

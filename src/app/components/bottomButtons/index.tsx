@@ -1,12 +1,6 @@
 "use client";
-import Image from "next/image";
-import cast from "../../../../public/cast.svg";
-import microPhone from "../../../../public/microphone-solid.svg";
-import phone from "../../../../public/phone.svg";
-import video from "../../../../public/video.svg";
 
-import { ReactElement, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { ReactElement, useState } from "react";
 import {
   FaChromecast,
   FaMicrophone,
@@ -14,10 +8,10 @@ import {
   FaVideo,
   FaVideoSlash,
 } from "react-icons/fa";
-import { BsPhone } from "react-icons/bs";
 import { MdCall } from "react-icons/md";
+import { useDispatch } from "react-redux";
 
-export default function Buttons() {
+export default function Buttons({leaveRoom} : {leaveRoom : any}) {
   const [buttonTogglers, setButtonTogglers] = useState({
     video: true,
     endCall: true,
@@ -87,7 +81,9 @@ export default function Buttons() {
 
   function videoHandler() {}
 
-  function EndCall() {}
+  function EndCall() {
+    leaveRoom();
+  }
 
   function microPhoneHandler() {}
 
@@ -98,6 +94,9 @@ export default function Buttons() {
       ...prev,
       [name]: !prev[name],
     }));
+    if (name == "endCall") {
+        EndCall();
+    }
   }
 
   return (

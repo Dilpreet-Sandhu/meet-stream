@@ -8,7 +8,7 @@ import unqid from "uniqid";
 import { redirect, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useCreateMeetingMutation } from "@/redux/features/api";
-import { apiCall, useAsyncMutation } from "@/app/lib/helper";
+import {  useAsyncMutation } from "@/app/lib/helper";
 import { useEffect, useState } from "react";
 
 export default function MeetingForm({
@@ -105,9 +105,9 @@ export default function MeetingForm({
           <div className="h-[50px]  mt-[120px] w-10/12">
             <button
               onClick={() => {
-                toast.loading("creating room")
+                const toastId = toast.loading("creating room")
                 submitBtn(roomData);
-                toast.success("room created")
+                toast.success("room created",{id : toastId});
               }}
               className="bg-[#2E236C] outline-none rounded-md  w-full h-full text-white font-medium text-[18px]"
             >

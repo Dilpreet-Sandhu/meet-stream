@@ -1,33 +1,40 @@
-import Messages from "@/app/components/messages";
-import VideoStreams from "@/app/components/videoCall";
-import Image from "next/image";
-import React from "react";
-import copy from "../../../../public/copy.svg";
 import Buttons from "@/app/components/bottomButtons";
-import SendButton from "@/app/components/sendMessageButton";
-import AcceptRequestDialog from "@/app/shared/acceptRequest";
-import { getMeetingDetails } from "@/server_actions/room/roomAction";
-import toast from "react-hot-toast";
 import CopyButton from "@/app/components/copyButton";
+import Messages from "@/app/components/messages";
+import SendButton from "@/app/components/sendMessageButton";
+import VideoStreams from "@/app/components/videoCall";
+import AcceptRequestDialog from "@/app/shared/acceptRequest";
+import { auth } from "@/auth";
+import { getMeetingDetails, leaveMeeting } from "@/server_actions/room/roomAction";
+import { redirect } from "next/navigation";
 
 export default async function MeetingRoom({ params }: { params: any }) {
   const { id } = params;
 
   const { data } = await getMeetingDetails(id);
+  const session = await auth();
+  
 
   async function copyText() {
     "use server";
     try {
-      await navigator.clipboard.writeText(data.meetingCode);
+      await navigator.clipboard.writeText(data?.meetingCode);
     } catch (error) {
       console.log(error);
     }
   }
+  async function leaveRoom(codeInput : string,userId : string)  {
+    'use server';
+    const room = await leaveMeeting();
+    redirect(`/`);
+  }
 
-  console.log(data);
 
   return (
-    <div className="w-full flex flex-col h-screen bg-black">
+    <div>
+      {
+        data.members.includes(session?.user.id) || data.hostId == session?.user?.id  ? (
+          <div className="w-full flex flex-col h-screen bg-black">
       <AcceptRequestDialog />
       <header className="bg-zinc-900 pl-5 text-[15px] py-5 w-full text-white">
         {data?.title}
@@ -59,10 +66,10 @@ export default async function MeetingRoom({ params }: { params: any }) {
             </div>
           </div>
         </div>
-        <div className="bg-zinc-900 flex items-center gap-4   w-full py-2">
-          <div className="w-[600px] ml-5 flex">
-            <div className="w-[150px] h-[40px] py-3  rounded-md flex items-center z-14  bg-zinc-500 opacity-40 ">
-              <p className=" text-nowrap text-[13px] font-semibold text-white tracking-wide pl-2">
+        <div className="bg-zinc-900 flex items-center gap-4  w-full py-2">
+          <div className="w-[600px] ml-5 cursor-pointer flex">
+            <div className="w-[150px] h-[40px] py-3 cursor-pointer rounded-md flex items-center z-14  bg-zinc-500 opacity-40 ">
+              <p className=" text-nowrap text-[13px] cursor-pointer font-semibold text-white  tracking-wide pl-2">
                 {data?.meetingCode}
               </p>
               <div className="w-[1px] h-full ml-1 bg-white" />
@@ -70,10 +77,15 @@ export default async function MeetingRoom({ params }: { params: any }) {
             </div>
           </div>
           <div className="flex flex-1 gap-5">
-            <Buttons />
+            <Buttons leaveRoom={leaveRoom}/>
           </div>
         </div>
       </div>
+    </div>
+        ) : <div className="w-full h-screen bg-zinc-900 flex items-center justify-center text-white text-3xl">
+          you are not authorized to enter meeting
+        </div>
+      }
     </div>
   );
 }

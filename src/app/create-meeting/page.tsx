@@ -32,6 +32,7 @@ export default async function CreateMeeting() {
     }
 
       const data = await createMeeting(formData);
+      console.log(data)
 
       redirect(`/meeting/${data.data._id}`)
 

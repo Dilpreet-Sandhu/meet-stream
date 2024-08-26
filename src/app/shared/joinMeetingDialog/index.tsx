@@ -2,26 +2,30 @@
 
 import { setJoinMeetingFalse } from "@/redux/features/additonals";
 import { useAppSelector } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import {motion} from 'framer-motion';
-import { addNotifcation } from "@/redux/features/roomNotification";
-import { Session } from "next-auth";
-import Image from "next/image";
+import { motion } from 'framer-motion';
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+
  
 
 
 
 
 
-export default function JoinMeetingDialog({user} : {user : any}) {
+export default function JoinMeetingDialog({user,addMember} : {user : any,addMember : any}) {
   const joinMeeting = useAppSelector((state) => state.additional.joinMeeting);
   const dispatch = useDispatch();
+
+  const [codeInput,setCodeInput] = useState("");
 
 
 
   function closeDialog() {
     dispatch(setJoinMeetingFalse());
   }
+
+ 
 
   return (
     <>
@@ -51,12 +55,17 @@ export default function JoinMeetingDialog({user} : {user : any}) {
               <div className="pl-4 flex flex-col gap-2 pt-4">
                 <label>Enter room code</label>
                 <input
+                  onChange={(e) => setCodeInput(e.target.value)}
+                  value={codeInput}
                   placeholder="room code"
                   className="bg-transparent pl-1 outline-none w-11/12 h-[40px] border-white rounded-md border-[2px]"
                 />
               </div>
               <div className="pt-6 pl-5">
-                <button className="w-[100px] h-[40px] rounded-md bg-[#2E236C] text-white">
+                <button onClick={() => {
+                  addMember(codeInput,user?.id);
+                  toast.success("entered room")
+                }} className="w-[100px] h-[40px] rounded-md bg-[#2E236C] text-white">
                   Join room
                 </button>
               </div>

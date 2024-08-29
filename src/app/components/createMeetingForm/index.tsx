@@ -2,14 +2,11 @@
 
 import { addFormDate } from "@/redux/features/room";
 import { useAppSelector } from "@/redux/store";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import SearchUsers from "../searchUesrs";
-import unqid from "uniqid";
-import { redirect, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { useCreateMeetingMutation } from "@/redux/features/api";
-import {  useAsyncMutation } from "@/app/lib/helper";
-import { useEffect, useState } from "react";
 
 export default function MeetingForm({
   submitBtn,
@@ -21,46 +18,48 @@ export default function MeetingForm({
   const dispatch = useDispatch();
   const router = useRouter();
   const roomData = useAppSelector((state) => state.room);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // const [data,executeMutation,loading,error] = useAsyncMutation(useCreateMeetingMutation);
 
   return (
     <div className="w-full  h-full flex">
-      <div className="w-1/2  py-5 px-1 h-full">
-        <form>
-          <div className="w-[400px] pl-5 h-[70px]">
-            <p className="text-[#17153B] text-[14px] font-medium opacity-65">
-              title
-            </p>
-            <input
-              value={roomData.title}
-              onChange={(e) =>
-                dispatch(addFormDate({ name: "title", data: e.target.value }))
-              }
-              name="title"
-              className="w-[300px] text-[#17153B] placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
-              placeholder="enter room title"
-            />
+      <div className="w-full  py-5 px-1 h-full">
+        <form className="flex justify-center items-center flex-col">
+          <div className="flex items-center">
+            <div className="w-[400px] pl-5 h-[70px]">
+              <p className="text-[#17153B] text-[14px] font-medium opacity-65">
+                title
+              </p>
+              <input
+                value={roomData.title}
+                onChange={(e) =>
+                  dispatch(addFormDate({ name: "title", data: e.target.value }))
+                }
+                name="title"
+                className="w-[300px] text-[#17153B] placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
+                placeholder="enter room title"
+              />
+            </div>
+            <div className="w-[500px] h-[100px]">
+              <p className="text-[#17153B] text-[14px] font-medium opacity-65">
+                description
+              </p>
+              <textarea
+                name="description"
+                value={roomData.description}
+                onChange={(e) =>
+                  dispatch(
+                    addFormDate({ name: "description", data: e.target.value })
+                  )
+                }
+                className="w-[400px] text-[#17153B] pt-2 text-[13px] placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[70px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
+                placeholder="enter description"
+              />
+            </div>
           </div>
-          <div className="w-[400px] pl-5 pt-5 h-[100px]">
-            <p className="text-[#17153B] text-[14px] font-medium opacity-65">
-              description
-            </p>
-            <input
-              name="description"
-              value={roomData.description}
-              onChange={(e) =>
-                dispatch(
-                  addFormDate({ name: "description", data: e.target.value })
-                )
-              }
-              className="w-[300px] text-[#17153B] placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[70px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
-              placeholder="enter description"
-            />
-          </div>
-          <div className="w-full pt-5 h-[100px] flex gap-5 mt-5">
-            <div className="w-[200px] pl-5 h-[50px]">
+          <div className="w-full  h-[100px] ml-[230px] flex gap-2 mt-5">
+            <div className="w-[400px] pl-5 h-[50px]">
               <p className="text-[#17153B] text-[14px] font-medium opacity-65">
                 Date
               </p>
@@ -71,11 +70,11 @@ export default function MeetingForm({
                 onChange={(e) =>
                   dispatch(addFormDate({ name: "date", data: e.target.value }))
                 }
-                className="w-[200px] px-4 text-[#17153B]  placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
+                className="w-[300px] px-4 text-[#17153B]  placeholder:text-[#17153B] focus:outline-none bg-transparent pl-4 rounded-md h-[40px] placeholder:opacity-65 placeholder:text-[13px] border-[#17153B] bg-none border-[3px]"
                 type="date"
               />
             </div>
-            <div className="w-[100px] pl-5 h-[50px]">
+            <div className="w-[200px] h-[50px]">
               <p className="text-[#17153B] text-[14px] font-medium opacity-65">
                 Time
               </p>
@@ -86,23 +85,14 @@ export default function MeetingForm({
                 onChange={(e) =>
                   dispatch(addFormDate({ name: "time", data: e.target.value }))
                 }
-                className="w-[120px] px-4 text-[#17153B]  focus:outline-none bg-transparent pl-4 rounded-md h-[40px] text-[14px] border-[#17153B] bg-none border-[3px]"
+                className="w-[200px] px-4 text-[#17153B]  focus:outline-none bg-transparent pl-4 rounded-md h-[40px] text-[14px] border-[#17153B] bg-none border-[3px]"
                 type="time"
               />
             </div>
           </div>
         </form>
-      </div>
-      <div className="w-1/2 px-20 h-full flex  justify-end">
-        <div className="flex items-start   w-full h-full flex-col">
-          <div>
-            <p className="text-[15px] text-[#17153B] opacity-75 pt-5 font-medium">
-              people to invite
-            </p>
-            <SearchUsers users={users} />
-          </div>
-
-          <div className="h-[50px]  mt-[120px] w-10/12">
+        <div className="flex-1 flex items-center justify-center mt-5">
+        <div className="h-[50px] w-[500px]">
             <button
               onClick={() => {
                 const toastId = toast.loading("creating room")

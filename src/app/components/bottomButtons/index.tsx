@@ -14,12 +14,13 @@ import CopyButton from "../copyButton";
 import { BiCopy } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { context } from "@/context/context";
+import { leaveMeeting } from "@/server_actions/room/roomAction";
+import { redirect } from "next/navigation";
 
 export default function Buttons({
-  leaveRoom,
+
   data,
 }: {
-  leaveRoom: any;
   data: any;
 }) {
   const [buttonTogglers, setButtonTogglers] = useState({
@@ -105,12 +106,16 @@ export default function Buttons({
   function videoHandler() {
     setVideo((prev : boolean) => !prev);
     if (streamState) {
-      streamState.enabled = false;
+      streamState.enabled = false;  
     }
   }
 
   function EndCall() {
-    leaveRoom();
+    const leaveRoom =  async() => {
+      const room = await leaveMeeting();
+      redirect(`/`);
+    }
+    leaveRoom()
   }
 
   function microPhoneHandler() {}

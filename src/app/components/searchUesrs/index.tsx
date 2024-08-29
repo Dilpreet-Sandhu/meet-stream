@@ -1,18 +1,20 @@
 'use client'
 import { addMembersToRoom } from "@/redux/features/room";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiPlus, BiUserCircle } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import search from "../../../../public/search.svg";
 import SearchedUser from "../searchedUser";
+import { getUserByName } from "@/app/actions";
 
 export default function SearchUsers({ users }: { users: any }) {
   const [openDialog, setOpenDialog] = useState(true);
   const [inputVal, setInputVal] = useState("");
+  const [searchUsers,setSearchUsers] = useState<any[] | undefined>([]);
   const dispatch = useDispatch();
 
-console.log(users);
+
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputVal(e.target.value);
@@ -26,6 +28,12 @@ console.log(users);
   function handleAddMember(user : any) {
       dispatch(addMembersToRoom(user));
   }
+
+  useEffect(() => {
+    getUserByName(inputVal).then((value)=> setSearchUsers(value?.data));
+  },[]);
+
+  console.log("search" + searchUsers)
 
   return (
     <div onClick={() => setOpenDialog(false)}  className="flex flex-col w-full h-full">

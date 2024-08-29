@@ -4,6 +4,7 @@ import { auth, signIn } from "@/auth";
 import dbConnect from "@/database/connection";
 import { User } from "@/models/userModel";
 import bcrypt from 'bcryptjs';
+import { Model } from "mongoose";
 import { CredentialsSignin } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -120,5 +121,28 @@ export async function getAllUsers() {
 
     } catch (error) {
         return error
+    }
+}
+
+export async function getUserByName(name : string) {
+    try {
+
+        const regExp = new RegExp(name,"i");
+        console.log(regExp);
+        const users = await User.find({username  : regExp});
+
+        if (!users) return {
+            message : "no users found",
+            statusCode :400
+        }
+        else {
+            return {
+                data : JSON.parse(JSON.stringify(users)),
+                statusCode : 200
+            }
+        }
+
+    } catch (error) {
+            console.log("error while fetching user" + error);
     }
 }

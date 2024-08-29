@@ -1,15 +1,17 @@
 "use client";
 
+import { context } from "@/context/context";
+import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import microPhoneIcon from "../../../../public/microphone-solid.svg";
-import Image from "next/image";
-import { context } from "@/context/context";
 
 
 export default function VideoStreams({data} : {data : any}) {
   const [userCount, setUserCount] = useState(1);
   const refs = useContext(context);
   const {socket,streamState,video} = useContext(context);
+
+  
 
   
   useEffect(() => {
@@ -27,11 +29,9 @@ export default function VideoStreams({data} : {data : any}) {
         peerConnection.ontrack = e => {
           setUserCount(2);
           const remoteVideo = refs.videoRef2;
-          const thirdVideoStream = refs.videoRef3;
           if (remoteVideo) {
             console.log(e.streams);
-            remoteVideo.current.srcObject = e.streams[0];
-            thirdVideoStream.current.srcObject = e.streams[1];
+            remoteVideo.current.srcObject = e?.streams[0];
           }
         }
 
@@ -92,6 +92,11 @@ export default function VideoStreams({data} : {data : any}) {
       socket.off('candidate');
     }
   });
+  useEffect(() => {
+    if (video) {
+      refs.videoRef1.current.style.display = "none";
+    }
+  },[video])
 
   return (
     <div
@@ -115,20 +120,22 @@ function RenderVideos({ userCount,refs,video }: { userCount: number,refs : any ,
 
   const {videoRef1,videoRef2,videoRef3} = refs;
 
+ 
+
 
   for (let i = 0; i < userCount; i++) {
     videos.push(
       <div
         key={i}
-        className="flex  justify-center items-center bg-[#242222] rounded-md"
+        className={`flex  justify-center items-center bg-[#242222] rounded-md`}
       >
         <div className="w-full h-full object-cover relative">
           <video
             ref={i === 0 ? videoRef1 : i == 1 ? videoRef2 : videoRef3}
-            className="z-1 w-full h-full"
+            className={` w-full  h-full`}
             autoPlay
             playsInline
-            id={`video`}
+            id={`${i == 0 ? "local-vid" : "remote-vid"}`}
           />
           <p className="absolute right-5 top-5 bg-[#565656] opacity-49 px-3 py-1 rounded-md">
             dilpreet

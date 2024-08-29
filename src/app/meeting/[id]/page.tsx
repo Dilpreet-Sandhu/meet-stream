@@ -26,9 +26,7 @@ export default async function MeetingRoom({ params }: { params: any }) {
   return (
     <div>
        {
-      //  data?.members?.includes(session?.user.id) ||data?.hostId == session?.user?.id ? ( 
-
-        true ? (
+       data?.members?.includes(session?.user.id) ||data?.hostId == session?.user?.id ? ( 
         <div className="w-full flex flex-col h-screen bg-black">
           <AcceptRequestDialog />
           <header className="bg-zinc-900 pl-5 text-[15px] py-5 w-full text-white">
@@ -65,7 +63,7 @@ export default async function MeetingRoom({ params }: { params: any }) {
             </div>
             <div className="bg-zinc-900 flex items-center gap-4  w-full py-2">
               <div className="flex items-center justify-center flex-1 gap-5">
-                <Buttons leaveRoom={leaveRoom}  data={data?.meetingCode}/>
+                <Buttons  data={data?.meetingCode}/>
               </div>
             </div>
           </div>

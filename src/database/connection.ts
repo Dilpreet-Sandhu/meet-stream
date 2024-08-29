@@ -1,17 +1,36 @@
-import mongoose from "mongoose";
+'use server'
+import mongoose,{connect, MongooseOptions} from "mongoose";
+
+const MONGODB_URI  = `${process.env.NEXT_PUBLIC_MONGODB_URI}`;
+if (!MONGODB_URI) {
+  throw new Error(
+    "Please define the MONGODB_URI environment variable inside .env"
+  );
+}
+
+let cached = (global as any).mongoose || { conn: null, promise: null };
 
 export default async function dbConnect(): Promise<void> {
   try {
-    if (mongoose.connection && mongoose.connections[0].readyState) return;
+    if (cached.conn) return cached.conn;
 
-    await mongoose
-      .connect(`${process.env.MONGO_URI as string}`)
-      .then(() => {
-        console.log("mongo database conencted");
-      })
-      .catch((err) =>
-        console.log("error while connecting to the database " + err)
+    if (!MONGODB_URI) {
+      throw new Error(
+        "Please define the MONGODB_URI environment variable inside .env"
       );
+    }
+    
+  
+  if (!cached.promise) {
+    
+
+    cached.promise = connect(MONGODB_URI, {
+    }).then((mongoose) => {
+      return mongoose;
+    });
+  }
+  cached.conn = await cached.promise;
+  return cached.conn;
   } catch (error) {
     console.log("error while connecting to the mongo server ", error);
   }

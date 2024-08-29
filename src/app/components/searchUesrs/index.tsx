@@ -1,19 +1,18 @@
 'use client'
+import { addMembersToRoom } from "@/redux/features/room";
 import Image from "next/image";
+import { useState } from "react";
+import { BiPlus, BiUserCircle } from "react-icons/bi";
+import { useDispatch } from "react-redux";
 import search from "../../../../public/search.svg";
 import SearchedUser from "../searchedUser";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { BiPlus } from "react-icons/bi";
-import { useDispatch } from "react-redux";
-import { addMembersToRoom } from "@/redux/features/room";
 
 export default function SearchUsers({ users }: { users: any }) {
   const [openDialog, setOpenDialog] = useState(true);
   const [inputVal, setInputVal] = useState("");
   const dispatch = useDispatch();
 
-
+console.log(users);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputVal(e.target.value);
@@ -41,11 +40,15 @@ export default function SearchUsers({ users }: { users: any }) {
               <div key={idx} className="bg-zinc-200 shadow-md rounded-sm flex">
                 <div className="w-10/12 flex pl-1 items-center gap-2  pt-1">
                   <div className="flex items-center gap-[4px]">
-                    <img
+                    {
+                      user?.avatar ? (
+                        <img
                       className="w-7 h-7 rounded-full"
                       src={user?.avatar}
                       alt="user"
                     />
+                      ) : <BiUserCircle className="w-7 h-7 rounded-full"/>
+                    }
                     <p>{user?.username}</p>
                   </div>
                 </div>

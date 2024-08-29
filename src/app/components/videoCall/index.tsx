@@ -1,91 +1,98 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import microPhoneIcon from "../../../../public/microphone-solid.svg";
 import Image from "next/image";
-
-const startMediaStream = async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    const videoElement = document.getElementById("local-video") as HTMLVideoElement;
-    if (videoElement) {
-        videoElement.srcObject = stream;
-    }
-  } catch (error: any) {
-    console.log("error accessing the media devices" + error);
-  }
-};
-
-const createConnection = (setScreenCount : any) => {
-    const config : RTCConfiguration = {
-      iceServers : [
-        {urls : "stun:stun.l.google.com:19302"}
-      ]
-    };
-
-    const peerConnection = new RTCPeerConnection(config);
-
-    peerConnection.onicecandidate = e => {
-      if (e.candidate) {
-        sendIceCandidates(e.candidate);
-      }
-    }
-
-    peerConnection.ontrack = e => {
-      setScreenCount(2);
-      const remoteVideoELement = document.getElementById("remote-video") as HTMLVideoElement;
-      if (remoteVideoELement) {
-        remoteVideoELement.srcObject = e.streams[0];
-      }
-    }
-    
-
-    return peerConnection;
-
-}
-
-const sendIceCandidates = (candidate : RTCIceCandidate) => {
-  //send ice candiate to other peer
-}
-
-const sendOffer = async (peerConnection : RTCPeerConnection) => {
-  const offer = await peerConnection.createOffer();
-  await peerConnection.setLocalDescription(offer);
-}
-
-const handleOffer = async (offer : RTCSessionDescriptionInit,peerConnection : RTCPeerConnection) => {
-    await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer); 
-
-    //send the answer the remote peer
-}
+import { context } from "@/context/context";
 
 
-
-export default function VideoStreams() {
+export default function VideoStreams({data} : {data : any}) {
   const [userCount, setUserCount] = useState(1);
+  const refs = useContext(context);
+  const {socket,streamState,video} = useContext(context);
+
   
   useEffect(() => {
+    const peerConnection = new RTCPeerConnection({
+      iceServers : [{urls : ["stun:stun.l.google.com:19302"]}]
+    });
     const connectPeers = async () => {
-      const peerConnection =  createConnection(setUserCount);
 
-      await startMediaStream();
+        peerConnection.onicecandidate = e => {
+          if (e.candidate) {
+            socket.emit("candidate",e.candidate)
+          }
+        }
 
-      const localStream = (document.getElementById("local-video") as HTMLVideoElement).srcObject as MediaStream;
+        peerConnection.ontrack = e => {
+          setUserCount(2);
+          const remoteVideo = refs.videoRef2;
+          const thirdVideoStream = refs.videoRef3;
+          if (remoteVideo) {
+            console.log(e.streams);
+            remoteVideo.current.srcObject = e.streams[0];
+            thirdVideoStream.current.srcObject = e.streams[1];
+          }
+        }
 
-      localStream.getTracks().forEach((track) => peerConnection.addTrack(track,localStream));
+        socket.on("offer",async (offer : any) => {
+          console.log(offer);
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit("answer",answer)
+        })
 
-      sendOffer(peerConnection);
+        socket.on("answer",async (answer : any) => {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+            console.log(answer)
+        })
 
+        socket.on("candidate",async (candidate : any) => {
+          try {
+            await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+          } catch (error) {
+            console.log("error while recieving ice candidates",error);
+          }
+        })
+    };
+    const startMediaStream = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video : true,audio : true});
+        if (stream) {
+          streamState.current = stream.getVideoTracks()[0];
+          console.log("stream " +streamState.current)
+        }
+        const localVideo = refs.videoRef1;
+        
+        if (localVideo) {
+            localVideo.current.srcObject = stream;
+        }
+        stream.getTracks().forEach(track => {
+          peerConnection.addTrack(track,stream);
+        });
 
+ 
+          const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        socket.emit("offer",offer);
+        
+      } catch (error) {
+        console.log("error while starting media stream" + error);
+      }
     }
-    connectPeers();
-  })
-  
+
+      connectPeers();
+    
+    startMediaStream();
+
+    return () => {
+      socket.off('offer');
+      socket.off('answer');
+      socket.off('candidate');
+    }
+  });
+
   return (
     <div
       className={`w-full h-full grid gap-2 ${
@@ -98,13 +105,16 @@ export default function VideoStreams() {
           : "grid-rows-2 grid-cols-2"
       }`}
     >
-      {RenderVideos({ userCount })}
+      {RenderVideos({ userCount,refs,video })}
     </div>
   );
 }
 
-function RenderVideos({ userCount }: { userCount: number }) {
+function RenderVideos({ userCount,refs,video }: { userCount: number,refs : any ,video : boolean}) {
   const videos: Array<React.JSX.Element> = [];
+
+  const {videoRef1,videoRef2,videoRef3} = refs;
+
 
   for (let i = 0; i < userCount; i++) {
     videos.push(
@@ -114,10 +124,11 @@ function RenderVideos({ userCount }: { userCount: number }) {
       >
         <div className="w-full h-full object-cover relative">
           <video
+            ref={i === 0 ? videoRef1 : i == 1 ? videoRef2 : videoRef3}
             className="z-1 w-full h-full"
             autoPlay
             playsInline
-            id={`${i === 0 ? "local-video" : "remote-video"}`}
+            id={`video`}
           />
           <p className="absolute right-5 top-5 bg-[#565656] opacity-49 px-3 py-1 rounded-md">
             dilpreet

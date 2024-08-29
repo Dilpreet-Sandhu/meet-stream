@@ -1,6 +1,7 @@
 "use client";
 import { signOut } from "next-auth/react";
 import React, { useState } from "react";
+import { BiUserCircle } from "react-icons/bi";
 
 export default function Logout({user} : {user : any}) {
 
@@ -19,7 +20,11 @@ export default function Logout({user} : {user : any}) {
         Logout
       </div>
       <div className="w-10 h-10 rounded-full">
+        {
+          user?.image ? (
           <img className="w-full h-full rounded-full cursor-pointer" src={user?.image}/>
+          ) : <BiUserCircle className="w-full h-full rounded-full cursor-pointer"/>
+        }
       </div>
     </>
   );

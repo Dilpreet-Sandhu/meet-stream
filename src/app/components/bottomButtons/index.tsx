@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactElement, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import {
   FaChromecast,
   FaMicrophone,
@@ -10,22 +10,35 @@ import {
 } from "react-icons/fa";
 import { MdCall } from "react-icons/md";
 import { useDispatch } from "react-redux";
+import CopyButton from "../copyButton";
+import { BiCopy } from "react-icons/bi";
+import { TiTick } from "react-icons/ti";
+import { context } from "@/context/context";
 
-export default function Buttons({leaveRoom} : {leaveRoom : any}) {
+export default function Buttons({
+  leaveRoom,
+  data,
+}: {
+  leaveRoom: any;
+  data: any;
+}) {
   const [buttonTogglers, setButtonTogglers] = useState({
     video: true,
     endCall: true,
     microPhone: true,
     cast: true,
+    copy : true
   });
 
   type button = {
     id: number;
-    name: "video" | "endCall" | "microPhone" | "cast";
+    name: "video" | "endCall" | "microPhone" | "cast" | "copy";
     activeButton: ReactElement;
     inactiveButton: ReactElement;
   };
   const dispatch = useDispatch();
+  const {setVideo,video,streamState} = useContext(context);
+  console.log(video);
 
   const buttons: Array<button> = [
     {
@@ -77,9 +90,24 @@ export default function Buttons({leaveRoom} : {leaveRoom : any}) {
         <FaChromecast color="gray" style={{ width: "25px", height: "25px" }} />
       ),
     },
+    {
+      id :5,
+      name : "copy",
+      activeButton : (
+        <BiCopy color="white" style={{width : "25px",height:"25px"}}/>
+      ),
+      inactiveButton : (
+        <TiTick color="white" style={{width : "25px",height:"25px"}}/>
+      )
+    }
   ];
 
-  function videoHandler() {}
+  function videoHandler() {
+    setVideo((prev : boolean) => !prev);
+    if (streamState) {
+      streamState.enabled = false;
+    }
+  }
 
   function EndCall() {
     leaveRoom();
@@ -89,29 +117,49 @@ export default function Buttons({leaveRoom} : {leaveRoom : any}) {
 
   function castScreen() {}
 
-  function handleClick(name: "video" | "endCall" | "microPhone" | "cast") {
+  function handleClick(name: "video" | "endCall" | "microPhone" | "cast" | "copy") {
     setButtonTogglers((prev) => ({
       ...prev,
       [name]: !prev[name],
     }));
     if (name == "endCall") {
-        EndCall();
+      EndCall();
+    }
+    if (name == "copy") {
+      copy()
+    }
+    if (name == "video") {
+      videoHandler()
     }
   }
+  function copy() {
+    async function copyCode() {
+      await navigator.clipboard.writeText(data);
+    }
+    copyCode();
+  }
+
+
+  
 
   return (
     <>
-      {buttons.map((icon, idx) => (
-        <button
-          key={idx}
-          onClick={() => handleClick(icon.name)}
-          className={` w-[45px] h-[45px] rounded-md bg-[#343434] fill-white flex items-center ${
-            idx == 1 ? "bg-red-500 " : ""
-          } justify-center`}
-        >
-          {buttonTogglers[icon.name] ? icon.activeButton : icon.inactiveButton}
-        </button>
-      ))}
+     
+      <div className="flex flex-1 items-center justify-center gap-5 ">
+        {buttons.map((icon, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleClick(icon.name)}
+            className={` w-[45px] h-[45px] rounded-md bg-[#343434] fill-white flex items-center ${
+              idx == 1 ? "bg-red-500 " : ""
+            } justify-center`}
+          >
+            {buttonTogglers[icon.name]
+              ? icon.activeButton
+              : icon.inactiveButton}
+          </button>
+        ))}
+      </div>
     </>
   );
 }

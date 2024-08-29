@@ -2,7 +2,7 @@
 import Image from "next/image";
 import copy from "../../../../public/copy.svg";
 import toast from "react-hot-toast";
-function CopyButton({copyFn} : {copyFn : () => Promise<void>}) {
+function CopyButton({copyFn} : {copyFn : () => void}) {
   return (
     <button onClick={() => {
       console.log("copy button clickdc")
